@@ -4,7 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 
-//#include <zmqpp/zmqpp.hpp>
+#include <zmqpp/zmqpp.hpp>
 
 
 #include <net/if.h>
@@ -25,19 +25,6 @@
 #include <SDL2/SDL.h>
 #include <unistd.h>
 
-/*#include <stdio.h>
-#include <stdlib.h>
-
-
-
-#include <net/if.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/ioctl.h>
-
-#include <linux/can.h>
-#include <linux/can/raw.h>
-*/
 using namespace ctre::phoenix;
 using namespace ctre::phoenix::platform;
 using namespace ctre::phoenix::motorcontrol;
@@ -75,18 +62,18 @@ void sleepApp(int ms)
 }
 
 int main() {
-	const string endpoint = "tcp://localhost:4242";
+	const std::string endpoint = "tcp://localhost:4242";
 
   	// initialize the 0MQ context
   	zmqpp::context context;
 
   	// generate a push socket
   	zmqpp::socket_type type = zmqpp::socket_type::push;
-  	zmqpp::socket socket (context, type);
+  	zmqpp::socket socketbig (context, type);
 
   	// open the connection
-  	cout << "Opening connection to " << endpoint << "..." << endl;
-  	socket.connect(endpoint);
+  	std::cout << "Opening connection to " << endpoint << "..." << std::endl;
+  	socketbig.connect(endpoint);
 
 	/* don't bother prompting, just use can0 */
 	//std::cout << "Please input the name of your can interface: ";
@@ -164,7 +151,7 @@ int main() {
 			}
 
 			nbytes = read(s, &frame, sizeof(struct can_frame));
-			if(frame.can_id == 0x11);
+			if(frame.can_id == 0x11)
 			{
 				printf("ID is ARM. Reading from ARM\r\n");
 				if(frame.data[0] == 0b10000100)
@@ -175,8 +162,9 @@ int main() {
 						printf("first bit is a 0\r\n");\
 						// use a socket to send shit to ARM.
 					}
-					
-			if(frame.can_id == 0x001);
+				}
+			}
+			else if(frame.can_id == 0x001);
 			{
 				printf("ID is correct\r\n");
 				unsigned int data1 = frame.data[0];

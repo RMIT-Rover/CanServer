@@ -34,7 +34,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 
 add_executable(example ${PROJECT_SOURCE_DIR}/example.cpp)
 target_include_directories(example PUBLIC ${ZeroMQ_INCLUDE_DIR})
-target_link_libraries(example PUBLIC ${ZeroMQ_LIBRARY})
+target_link_libraries(example ${ZeroMQ_LIBRARY})
 if (${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "arm-linux-gnueabihf") # Jetson TK1 / Pi
     target_link_libraries(example ${CMAKE_SOURCE_DIR}/lib/raspberry/libCTRE_Phoenix.a)
     target_link_libraries(example ${CMAKE_SOURCE_DIR}/lib/raspberry/libCTRE_PhoenixCCI.a)
