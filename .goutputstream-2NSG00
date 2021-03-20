@@ -4,8 +4,6 @@
 #include <string.h>
 #include <unistd.h>
 
-//#include <zmqpp/zmqpp.hpp>
-
 
 #include <net/if.h>
 #include <sys/ioctl.h>
@@ -75,19 +73,6 @@ void sleepApp(int ms)
 }
 
 int main() {
-	const string endpoint = "tcp://localhost:4242";
-
-  	// initialize the 0MQ context
-  	zmqpp::context context;
-
-  	// generate a push socket
-  	zmqpp::socket_type type = zmqpp::socket_type::push;
-  	zmqpp::socket socket (context, type);
-
-  	// open the connection
-  	cout << "Opening connection to " << endpoint << "..." << endl;
-  	socket.connect(endpoint);
-
 	/* don't bother prompting, just use can0 */
 	//std::cout << "Please input the name of your can interface: ";
 	float left_speed = 0;
@@ -164,18 +149,22 @@ int main() {
 			}
 
 			nbytes = read(s, &frame, sizeof(struct can_frame));
-			if(frame.can_id == 0x11);
+//...............................................................................................................///
+			if(frame.can_id == 0x11)
 			{
-				printf("ID is ARM. Reading from ARM\r\n");
+				printf("ID is ARM. reading from ARM\r\n");
 				if(frame.data[0] == 0b10000100)
 				{
 					if(frame.data[1] & (1<<0))
 					{
-
+						frame.data[2]
 						printf("first bit is a 0\r\n");\
-						// use a socket to send shit to ARM.
+						// open claw
 					}
 					
+				}
+			}
+//...............................................................................................................//
 			if(frame.can_id == 0x001);
 			{
 				printf("ID is correct\r\n");
