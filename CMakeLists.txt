@@ -16,25 +16,25 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package (Threads REQUIRED)
 find_package(SDL2 REQUIRED)
 
-find_package (PkgConfig)
-pkg_check_modules(PC_ZeroMQ QUIET zmq)
+# find_package (PkgConfig)
+# pkg_check_modules(PC_ZeroMQ QUIET zmq)
 
-find_path(ZeroMQ_INCLUDE_DIR
-        NAMES zmq.hpp
-        PATHS ${PC_ZeroMQ_INCLUDE_DIRS}
-        )
+# find_path(ZeroMQ_INCLUDE_DIR
+#         NAMES zmq.hpp
+#         PATHS ${PC_ZeroMQ_INCLUDE_DIRS}
+#         )
 
-## use the hint from about to find the location of libzmq
-find_library(ZeroMQ_LIBRARY
-        NAMES zmq
-        PATHS ${PC_ZeroMQ_LIBRARY_DIRS}
-        )
+# ## use the hint from about to find the location of libzmq
+# find_library(ZeroMQ_LIBRARY
+#         NAMES zmq
+#         PATHS ${PC_ZeroMQ_LIBRARY_DIRS}
+#         )
 # The following folder will be included
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
-add_executable(example ${PROJECT_SOURCE_DIR}/example.cpp)
-target_include_directories(example PUBLIC ${ZeroMQ_INCLUDE_DIR})
-target_link_libraries(example ${ZeroMQ_LIBRARY})
+add_executable(example ${PROJECT_SOURCE_DIR}/example.cpp ${PROJECT_SOURCE_DIR}/tcp.cpp)
+# target_include_directories(example PUBLIC ${ZeroMQ_INCLUDE_DIR})
+# target_link_libraries(example ${ZeroMQ_LIBRARY})
 if (${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "arm-linux-gnueabihf") # Jetson TK1 / Pi
     target_link_libraries(example ${CMAKE_SOURCE_DIR}/lib/raspberry/libCTRE_Phoenix.a)
     target_link_libraries(example ${CMAKE_SOURCE_DIR}/lib/raspberry/libCTRE_PhoenixCCI.a)

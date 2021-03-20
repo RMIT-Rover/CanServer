@@ -1,15 +1,9 @@
 #define Phoenix_No_WPI // remove WPI dependencies
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 
-#include <zmqpp/zmqpp.hpp>
-
-
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
+#include "tcp.h"
 
 #include <linux/can.h>
 #include <linux/can/raw.h>
@@ -24,6 +18,9 @@
 #include <thread>
 #include <SDL2/SDL.h>
 #include <unistd.h>
+
+#define PORT 5555 
+
 
 using namespace ctre::phoenix;
 using namespace ctre::phoenix::platform;
@@ -61,22 +58,21 @@ void sleepApp(int ms)
 	std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }
 
-int main() {
-	const std::string endpoint = "tcp://localhost:4242";
+int main(int argc, char **argv) {
+    TcpClient arm_server;
+    string host;
 
-  	// initialize the 0MQ context
-  	zmqpp::context context;
+    //connect to host
+    arm_server.conn("localhost" , 5555);
 
-  	// generate a push socket
-  	zmqpp::socket_type type = zmqpp::socket_type::push;
-  	zmqpp::socket socketbig (context, type);
 
-  	// open the connection
-  	std::cout << "Opening connection to " << endpoint << "..." << std::endl;
-  	socketbig.connect(endpoint);
+    //receive and echo reply
+    std::cout<<"----------------------------\n\n";
+    std::cout<<arm_server.receive(1024);
+    std::cout<<"\n\n----------------------------\n\n";
 
 	/* don't bother prompting, just use can0 */
-	//std::cout << "Please input the name of your can interface: ";
+	std::cout << "Please input the name of your can interface: ";
 	float left_speed = 0;
 	float right_speed = 0;
 	int s,s1, i;
